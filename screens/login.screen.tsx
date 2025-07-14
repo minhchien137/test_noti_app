@@ -4,6 +4,7 @@ import Constants from "expo-constants";
 import Button from "../components/buttons/Button";
 import { API_URL } from "@env";
 import { login } from "../api/api/login/login";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginScreen = () => {
   // state
@@ -33,8 +34,22 @@ const LoginScreen = () => {
     setIsLoading(true);
     try {
       const response = await login(userInfo.username, userInfo.password);
-      console.log("Login response:", response);
-    } catch (error) {}
+      console.log("Login response:", response.data.access_token);
+      const accessToken = response.data.access_token;
+
+      if (accessToken) {
+        // Lưu accessToken vào AsyncStorage hoặc Context API
+        await AsyncStorage.setItem("userToken", accessToken);
+        Alert.alert("Thành công", "Đăng nhập thành công!");
+      } else {
+        Alert.alert("Lỗi", "Đăng nhập không thành công. Vui lòng thử lại.");
+      }
+    } catch (error) {
+      Alert.alert("Lỗi", "Đăng nhập không thành công. Vui lòng thử lại.");
+    } finally {
+      setIsLoading(false);
+      setUserInfo({ username: "", password: "" }); // Reset input fields after login attempt
+    }
   };
 
   return (
