@@ -19,6 +19,10 @@ export default function MainApp() {
         tabBarActiveTintColor: "blue",
         tabBarInactiveTintColor: "gray",
         headerShown: false,
+        tabBarShowLabel: false,
+        tabBarIconStyle: {
+          marginTop: 5,
+        },
       })}
     >
       <Tab.Screen name="Home" component={HomeScreen} />

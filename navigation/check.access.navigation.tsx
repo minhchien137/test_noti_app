@@ -6,10 +6,12 @@ import { checkAccess } from "../api/api/auth/auth";
 export default function CheckAccess({ navigation }: { navigation: any }) {
   useEffect(() => {
     const checkLogin = async () => {
-      // @ts-ignore
-      const res: { status: boolean; userData: any } = await checkAccess();
-
-      if (res.status) {
+      const access_token = await AsyncStorage.getItem("access_token");
+      const res = { userData: { name: "User" } }; // Mocked response for demonstration
+      if (access_token) {
+        // @ts-ignore
+        // const res: { status: boolean; userData: any } = await checkAccess();
+        // if (res.status) {
         navigation.reset({
           index: 0,
           routes: [
