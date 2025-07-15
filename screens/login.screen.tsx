@@ -34,12 +34,22 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
     setIsLoading(true);
     try {
       const response = await login(userInfo.username, userInfo.password);
-      console.log("Login response:", response.data.access_token);
-      const accessToken = response.data.access_token;
+      console.log("Login response:", response);
+      // @ts-ignore
+      const accessToken = response.access_token;
 
       if (accessToken) {
         // Lưu accessToken vào AsyncStorage hoặc Context API
         await AsyncStorage.setItem("access_token", accessToken);
+        setTimeout(() => {
+          setIsLoading(false);
+          setUserInfo({ username: "", password: "" }); // Reset input fields after login attempt
+        }, 500);
+        // navigation.navigate("Main");
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "Main" }],
+        });
       } else {
         Alert.alert("Lỗi", "Đăng nhập không thành công. Vui lòng thử lại.");
       }
@@ -88,7 +98,7 @@ const LoginScreen = ({ navigation }: { navigation: any }) => {
       />
       <Button
         title={isLoading ? "Đang đăng nhập..." : "Đăng nhập"}
-        onPress={handleLoginFake}
+        onPress={handleLogin}
         disabled={isLoading}
       />
     </View>

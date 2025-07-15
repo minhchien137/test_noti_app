@@ -10,10 +10,10 @@ export default function HomeScreen() {
   return (
     <View className="flex-1 justify-center items-center bg-blue-100 p-4">
       <Text className="text-3xl font-bold text-blue-800 text-center">
-        Chào mừng đến với Home! {userData?.name}
+        Chào mừng đến với Home! {userData?.name_user}
       </Text>
       <Text className="text-lg mt-2 text-blue-600">
-        Đây là màn hình chính của bạn.
+        Department: {userData?.name_department}
       </Text>
     </View>
   );
