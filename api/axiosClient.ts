@@ -33,7 +33,7 @@ axiosClient.interceptors.request.use(
 axiosClient.interceptors.response.use(
   (response: AxiosResponse): AxiosResponse => {
     console.log("response: ", response);
-    return response;
+    return response.data;
   },
   (error: AxiosError) => {
     console.log("error", error);

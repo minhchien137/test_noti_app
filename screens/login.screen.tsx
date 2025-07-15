@@ -1,12 +1,12 @@
 import { Alert, StyleSheet, Text, TextInput, View } from "react-native";
 import React, { useState } from "react";
-import Constants from "expo-constants";
 import Button from "../components/buttons/Button";
-import { API_URL } from "@env";
-import { login } from "../api/api/login/login";
+import { login } from "../api/api/auth/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }: { navigation: any }) => {
+  // const navigation = useNavigation();
   // state
   const [userInfo, setUserInfo] = useState({
     username: "",
@@ -39,8 +39,7 @@ const LoginScreen = () => {
 
       if (accessToken) {
         // Lưu accessToken vào AsyncStorage hoặc Context API
-        await AsyncStorage.setItem("userToken", accessToken);
-        Alert.alert("Thành công", "Đăng nhập thành công!");
+        await AsyncStorage.setItem("access_token", accessToken);
       } else {
         Alert.alert("Lỗi", "Đăng nhập không thành công. Vui lòng thử lại.");
       }
@@ -50,6 +49,24 @@ const LoginScreen = () => {
       setIsLoading(false);
       setUserInfo({ username: "", password: "" }); // Reset input fields after login attempt
     }
+  };
+
+  const handleLoginFake = async () => {
+    // Giả lập đăng nhập thành công
+    setIsLoading(true);
+    await AsyncStorage.setItem(
+      "access_token",
+      `${userInfo.username}-${userInfo.password}-token`
+    );
+    setTimeout(() => {
+      setIsLoading(false);
+      setUserInfo({ username: "", password: "" }); // Reset input fields after login attempt
+    }, 500);
+    // navigation.navigate("Main");
+    navigation.reset({
+      index: 0,
+      routes: [{ name: "Main" }],
+    });
   };
 
   return (
@@ -71,7 +88,7 @@ const LoginScreen = () => {
       />
       <Button
         title={isLoading ? "Đang đăng nhập..." : "Đăng nhập"}
-        onPress={handleLogin}
+        onPress={handleLoginFake}
         disabled={isLoading}
       />
     </View>
